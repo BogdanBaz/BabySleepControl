@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="22dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="22dp"
+    android:background="@color/purple_500">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:alpha="0.85"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/sleep_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:alpha="0.75"
+            app:srcCompat="@drawable/sleeppng" />
+
+        <Button
+            android:id="@+id/edit_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:drawable/ic_menu_edit"
+            app:backgroundTint="@color/purple_700"
+            app:backgroundTintMode="src_in" />
+
+        <TextView
+            android:id="@+id/start_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/sleep_item_image"
+            android:layout_alignTop="@+id/sleep_item_image"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:background="#E3D1D1"
+            android:text="StartTime"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/end_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/sleep_item_image"
+            android:layout_alignEnd="@+id/sleep_item_image"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:background="#E3D1D1"
+            android:text="EndTime"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal|bold|italic" />
+
+        <TextView
+            android:id="@+id/date_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#ECE0F4"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="italic" />
+
+        <ImageView
+            android:id="@+id/isDay_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/moon" />
+
+        <ImageView
+            android:id="@+id/stopwatch_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/result_txt"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="130dp"
+            app:srcCompat="@drawable/stopwatch" />
+
+        <TextView
+            android:id="@+id/result_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="134dp"
+            android:layout_centerHorizontal="true"
+            android:text="result_is"
+            android:textColor="@color/black" />
+
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
