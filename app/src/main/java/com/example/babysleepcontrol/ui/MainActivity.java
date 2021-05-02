@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -17,6 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.babysleepcontrol.R;
 import com.example.babysleepcontrol.adapter.PageAdapter;
+import com.example.babysleepcontrol.ui.sleepfragment.SleepFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        showAlert();
+        //showAlert();
+        super.onBackPressed();
     }
 
     private void showAlert() {

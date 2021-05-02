@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.babysleepcontrol.ui.DiaperFragment;
 import com.example.babysleepcontrol.ui.EatFragment;
-import com.example.babysleepcontrol.ui.SleepFragment;
+import com.example.babysleepcontrol.ui.sleepfragment.SleepFragment;
 
 public class PageAdapter extends FragmentPagerAdapter {
     private int numOfTabs;

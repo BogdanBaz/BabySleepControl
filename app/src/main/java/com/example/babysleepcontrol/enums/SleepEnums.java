@@ -1,4 +1,4 @@
-package com.example.enums;
+package com.example.babysleepcontrol.enums;
 
 public enum SleepEnums {
     TABLE_NAME("sleep_table1"),

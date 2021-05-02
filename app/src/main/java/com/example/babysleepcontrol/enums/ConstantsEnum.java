@@ -1,4 +1,4 @@
-package com.example.enums;
+package com.example.babysleepcontrol.enums;
 
 public enum ConstantsEnum {
 
