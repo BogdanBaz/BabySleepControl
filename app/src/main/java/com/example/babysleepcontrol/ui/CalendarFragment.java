@@ -2,6 +2,7 @@ package com.example.babysleepcontrol.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.babysleepcontrol.enums.Constants.DAY_YEAR_ONLY_FORMAT;
+
 public class CalendarFragment extends Fragment implements View.OnClickListener {
-    Button showBtn, cancelBtn,gotoBtn;
+    Button showBtn, cancelBtn, gotoBtn;
     CalendarView calendarView;
-     String selectedDay;
-     ViewPager viewPager;
+    String selectedDay;
+    SleepFragment sleepFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+
         calendarView = view.findViewById(R.id.calendar_view);
 
         showBtn = view.findViewById(R.id.show_btn_calendar);
@@ -57,14 +61,20 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             @SuppressLint("DefaultLocale")
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                selectedDay = String.format("%02d",dayOfMonth) + "." +  String.format("%02d",month+1)+ "." + year ;
-                System.out.println(selectedDay);
+                selectedDay = String.format("%02d", dayOfMonth) + "." + String.format("%02d", month + 1) + "." + year;
             }
         });
+
+        List<Fragment> fragments = getParentFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof SleepFragment) {
+                sleepFragment = (SleepFragment) fragment;
+            }
+        }
     }
 
     private void initPresentDay() {
-        selectedDay = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+        selectedDay = DAY_YEAR_ONLY_FORMAT.format(new Date());
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -72,24 +82,25 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.show_btn_calendar:
-                Toast.makeText(getContext(),"Showing data of  " + selectedDay,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Showing data of  " + selectedDay, Toast.LENGTH_SHORT).show();
                 startFragment();
                 break;
             case R.id.cancel_btn_calendar:
-                getFragmentManager().popBackStackImmediate();
+                sleepFragment.hideButtons(false);
+                getParentFragmentManager().popBackStackImmediate();
                 break;
             case R.id.goto_btn_calendar:
                 calendarView.setDate(Calendar.getInstance().getTimeInMillis(), false, true);
                 initPresentDay();
-                Toast.makeText(getContext(),"Goto present day",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Goto present day", Toast.LENGTH_SHORT).show();
+                startFragment();
                 break;
         }
     }
 
     private void startFragment() {
-        List<Fragment> fragments = getFragmentManager().getFragments();
-        SleepFragment sleepFragment = (SleepFragment) fragments.get(0);
-        sleepFragment.setCurrentDate(selectedDay);
-        getFragmentManager().popBackStackImmediate();
+            sleepFragment.setCurrentDate(selectedDay);
+            sleepFragment.hideButtons(false);
+        getParentFragmentManager().popBackStackImmediate();
     }
 }

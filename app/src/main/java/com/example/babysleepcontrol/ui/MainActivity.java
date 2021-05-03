@@ -1,6 +1,5 @@
 package com.example.babysleepcontrol.ui;
 
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -79,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item3:
                 Toast.makeText(this, "Item3 selected ", Toast.LENGTH_SHORT).show();
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -98,19 +96,13 @@ public class MainActivity extends AppCompatActivity {
     private void showAlert() {
         AlertDialog.Builder diag = new AlertDialog.Builder(this);
         diag.setMessage("Do you want to exit app?");
-        diag.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SleepFragment sleepFragment = (SleepFragment) getVisibleFragment();
-                sleepFragment.onDestroyView();
-                moveTaskToBack(true);
-            }
+        diag.setPositiveButton("Yes", (dialog, which) -> {
+            SleepFragment sleepFragment = (SleepFragment) getVisibleFragment();
+            sleepFragment.onDestroyView();
+            moveTaskToBack(true);
         });
-        diag.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
+        diag.setNegativeButton("No", (dialog, which) -> {
+            return;
         });
         diag.create().show();
     }

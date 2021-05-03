@@ -17,12 +17,12 @@ import static com.example.babysleepcontrol.enums.ConstantsEnum.START_NIGHT;
 
 @Entity(tableName = "sleep_table")
 public class SleepData {
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @TypeConverters({TimestampConverter.class})
     private Date startTime;
@@ -31,6 +31,11 @@ public class SleepData {
     private Date endTime;
 
     String result;
+
+    public void setDay(Boolean day) {
+        isDay = day;
+    }
+
     private Boolean isDay;
 
     public SleepData(Date startTime, Date endTime, String result) {
@@ -73,7 +78,7 @@ public class SleepData {
         this.isDay = calculateIsDay();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

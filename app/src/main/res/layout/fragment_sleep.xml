@@ -7,6 +7,8 @@
     android:id="@+id/sleep_fragment_layout"
     tools:context=".ui.sleepfragment.SleepFragment">
 
+
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -31,43 +33,22 @@
     </TextView>
 
 
-    <Button
-        android:id="@+id/calendar_btn"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@android:drawable/ic_menu_my_calendar"
-        app:backgroundTintMode="screen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/current_data"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/delete_btn"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@android:drawable/ic_menu_delete"
-        app:backgroundTintMode="screen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/calendar_btn"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:gravity="top"
+        app:layout_constraintBottom_toTopOf="@id/layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar_btn"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/layout">
+        app:layout_constraintTop_toBottomOf="@+id/calendar_btn">
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sleep_container"
+            android:id="@+id/sleep_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numColumns="auto_fit">
@@ -97,6 +78,44 @@
             android:textOn="stop sleeping" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/calendar_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/ic_menu_my_calendar"
+        app:backgroundTintMode="screen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/current_data"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/delete_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/ic_menu_delete"
+        app:backgroundTintMode="screen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/calendar_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/sleep_frame_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:animationCache="true"
+        android:focusable="auto"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/layout"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        tools:visibility="visible">
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

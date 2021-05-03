@@ -15,7 +15,6 @@ import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,17 +27,17 @@ import com.example.babysleepcontrol.ui.EditSleepItem;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+
+import static com.example.babysleepcontrol.enums.Constants.DAY_TIME_FORMAT;
+import static com.example.babysleepcontrol.enums.Constants.DAY_YEAR_ONLY_FORMAT;
 
 
 public class SleepFragment extends Fragment implements View.OnClickListener {
 
     RecyclerView recyclerView;
     ToggleButton startStopBtn;
-    Button delete, calendar_btn;
+    Button deleteBtn, calendarBtn;
     private TextView currentData;
     SleepFragmentAdapter sleepFragmentAdapter;
     String selectedData;
@@ -60,16 +59,17 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
             view = inflater.inflate(R.layout.fragment_sleep, container, false);
         }
 
-        recyclerView = view.findViewById(R.id.sleep_container);
+        recyclerView = view.findViewById(R.id.sleep_recycler_view);
         sleepFragmentAdapter = new SleepFragmentAdapter();
         recyclerView.setAdapter(sleepFragmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         startStopBtn = view.findViewById(R.id.start_stop_btn);
-        delete = view.findViewById(R.id.delete_btn);
-        calendar_btn = view.findViewById(R.id.calendar_btn);
-        calendar_btn.setOnClickListener(this);
-        delete.setOnClickListener(this);
+        deleteBtn = view.findViewById(R.id.delete_btn);
+        calendarBtn = view.findViewById(R.id.calendar_btn);
+
+        calendarBtn.setOnClickListener(this);
+        deleteBtn.setOnClickListener(this);
         startStopBtn.setOnClickListener(this);
 
         currentData = view.findViewById(R.id.current_data);
@@ -79,7 +79,7 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
         if (selectedData != null) {
             currentData.setText(selectedData);
         } else
-            currentData.setText(new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date()));
+            currentData.setText(DAY_YEAR_ONLY_FORMAT.format(new Date()));
         startStopBtn.setChecked(loadInstance());
 
         initData();
@@ -87,21 +87,20 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
-        sleepViewModel.getAllSleepData().observe(getViewLifecycleOwner(), new Observer<List<SleepData>>() {
-            @Override
-            public void onChanged(List<SleepData> sleepData) {
-                sleepFragmentAdapter.addSleepData(sleepData);
-            }
-        });
+        sleepViewModel.getAllSleepData().observe(getViewLifecycleOwner(), sleepData ->
+                sleepFragmentAdapter.addSleepData(sleepData));
 
-        sleepFragmentAdapter.setOnItemClickListener(new SleepFragmentAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(SleepData sleepData) {
-                Toast.makeText(getContext(), "EDIT_BTN ", Toast.LENGTH_SHORT).show();
-                Fragment editSleepItem = new EditSleepItem();
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.main_layout, editSleepItem).addToBackStack(null).commit();
-            }
+        sleepFragmentAdapter.setOnItemClickListener(sleepData -> {
+            Fragment editSleepItem = new EditSleepItem();
+
+            Bundle bundle = new Bundle();
+            bundle.putLong("id",sleepData.getId());
+            bundle.putString("start", DAY_TIME_FORMAT.format(sleepData.getStartTime()));
+            bundle.putString("end", DAY_TIME_FORMAT.format(sleepData.getEndTime()));
+            editSleepItem.setArguments(bundle);
+
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.sleep_frame_container, editSleepItem).addToBackStack(null).commit();
         });
     }
 
@@ -129,8 +128,19 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
 
     private void startCalendarFragment() {
         Fragment calendarFragment = new CalendarFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_layout, calendarFragment).addToBackStack(null).commit();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.sleep_frame_container, calendarFragment).addToBackStack(null).commit();
+        hideButtons(true);
+    }
+
+    public void hideButtons(boolean hide) {
+        if (hide) {
+            deleteBtn.setVisibility(View.INVISIBLE);
+            calendarBtn.setVisibility(View.INVISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.VISIBLE);
+            calendarBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     private void deleteData() {
@@ -182,5 +192,12 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
     public void setCurrentDate(String selectedDay) {
         this.selectedData = selectedDay;
         currentData.setText(selectedData);
+        Log.d("TAG", " selected data set -  " + selectedData);
+    }
+
+    public void updateAfterEdit(Date start, Date end , long id) {
+        SleepData sleepData = new SleepData(start,end,null);
+        sleepData.setId(id);
+        sleepViewModel.update(sleepData);
     }
 }
