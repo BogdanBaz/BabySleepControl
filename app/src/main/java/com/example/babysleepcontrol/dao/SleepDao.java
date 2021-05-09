@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import com.example.babysleepcontrol.data.SleepData;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -27,4 +28,8 @@ public interface  SleepDao{
 
     @Query("SELECT * FROM sleep_table ")
     LiveData<List<SleepData>> getAllNotes();
+
+    @Query("SELECT * FROM sleep_table WHERE date(startTime) LIKE:start ")
+    LiveData<List<SleepData>> getNotesByDay(Date start);
+
 }

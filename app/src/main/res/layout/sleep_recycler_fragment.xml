@@ -23,7 +23,7 @@
         <ImageView
             android:id="@+id/sleep_item_image"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="65dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
@@ -43,6 +43,18 @@
             app:backgroundTint="@color/purple_700"
             app:backgroundTintMode="src_in" />
 
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@+id/notes_txt"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:background="@android:drawable/ic_menu_delete"
+            app:backgroundTint="@color/purple_700"
+            app:backgroundTintMode="src_in" />
+
         <TextView
             android:id="@+id/start_txt"
             android:layout_width="wrap_content"
@@ -50,11 +62,11 @@
             android:layout_alignStart="@+id/sleep_item_image"
             android:layout_alignTop="@+id/sleep_item_image"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="#E3D1D1"
             android:text="StartTime"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:textStyle="bold|italic" />
 
         <TextView
@@ -63,12 +75,12 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/sleep_item_image"
             android:layout_alignEnd="@+id/sleep_item_image"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:background="#E3D1D1"
             android:text="EndTime"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:textStyle="normal|bold|italic" />
 
         <TextView
@@ -101,7 +113,7 @@
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/result_txt"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="110dp"
             app:srcCompat="@drawable/stopwatch" />
 
         <TextView
@@ -109,10 +121,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="134dp"
+            android:layout_marginTop="114dp"
             android:layout_centerHorizontal="true"
             android:text="result_is"
             android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/notes_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/result_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:hint="any notes ?.."
+            android:textColor="@color/design_default_color_error"
+            android:textColorHint="@color/purple_200"
+            android:textSize="12sp"
+            android:textStyle="italic" />
 
 
     </RelativeLayout>

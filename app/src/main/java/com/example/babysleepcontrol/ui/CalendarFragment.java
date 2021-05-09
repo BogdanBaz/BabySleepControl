@@ -2,7 +2,6 @@ package com.example.babysleepcontrol.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.babysleepcontrol.R;
 import com.example.babysleepcontrol.ui.sleepfragment.SleepFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.babysleepcontrol.enums.Constants.DAY_YEAR_ONLY_FORMAT;
 

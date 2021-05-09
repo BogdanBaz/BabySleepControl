@@ -32,25 +32,41 @@ public class SleepData {
 
     String result;
 
+    String notes;
+
+    public void setResult() {
+        this.result = calculateRes();
+    }
+
     public void setDay(Boolean day) {
         isDay = day;
     }
 
     private Boolean isDay;
 
-    public SleepData(Date startTime, Date endTime, String result) {
+    public SleepData(Date startTime, Date endTime, String result, String notes) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.isDay = calculateIsDay();
 
-        if (endTime == null) {
-            this.result = "waiting for end of sleeping..";
-        } else if (result != null) {
+        if (result != null && endTime != null) {
             Log.d("SLEEP_DATA CLASS", "SET RESULT FROM CONSTRUCTOR  " + result);
             this.result = result;
         } else {
             this.result = calculateRes();
         }
+        if (notes == null) {
+            this.notes = "";
+        } else
+            this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public Date getStartTime() {
@@ -93,10 +109,14 @@ public class SleepData {
 
     @SuppressLint("DefaultLocale")
     private String calculateRes() {
-        long milliseconds = endTime.getTime() - startTime.getTime();
+        long milliseconds;
+        if (endTime != null) {
+            milliseconds = endTime.getTime() - startTime.getTime();
+        } else milliseconds = new Date().getTime() - startTime.getTime();
+
         int resHours = (int) (milliseconds / (60 * 60 * 1000));
         int resMinutes = (int) (milliseconds - (long) resHours * (60 * 60 * 1000)) / (60 * 1000);
 
-        return String.format("%02d", resHours) + "h. " + String.format("%02d", resMinutes) + "m.";
+        return String.format("%02dh. %02dm.", resHours, resMinutes);
     }
 }

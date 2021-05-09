@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import com.example.babysleepcontrol.dao.SleepDao;
 import com.example.babysleepcontrol.data.SleepData;
 
-@Database(entities = {SleepData.class}, version = 2)
+@Database(entities = {SleepData.class}, version = 3)
 @TypeConverters({TimestampConverter.class})
 public abstract class SleepDatabase extends RoomDatabase {
 

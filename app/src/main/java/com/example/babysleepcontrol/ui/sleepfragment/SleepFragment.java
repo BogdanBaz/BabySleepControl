@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +30,11 @@ import com.example.babysleepcontrol.ui.EditSleepItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 import static com.example.babysleepcontrol.enums.Constants.DAY_TIME_FORMAT;
 import static com.example.babysleepcontrol.enums.Constants.DAY_YEAR_ONLY_FORMAT;
@@ -37,12 +44,14 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
 
     RecyclerView recyclerView;
     ToggleButton startStopBtn;
-    Button deleteBtn, calendarBtn;
+    Button deleteBtn;
+    ImageButton calendarBtn;
     private TextView currentData;
     SleepFragmentAdapter sleepFragmentAdapter;
     String selectedData;
     View view;
     SleepViewModel sleepViewModel;
+    private Disposable disposable;
 
     private long id;
 
@@ -52,9 +61,9 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("TAG", " onCreateView____ ");
+        Log.d("TAG", " onCreateView____ " );
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_sleep, container, false);
         }
@@ -87,21 +96,39 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
+
         sleepViewModel.getAllSleepData().observe(getViewLifecycleOwner(), sleepData ->
-                sleepFragmentAdapter.addSleepData(sleepData));
+                sleepFragmentAdapter.submitList(sleepData));
 
-        sleepFragmentAdapter.setOnItemClickListener(sleepData -> {
+        sleepFragmentAdapter.setOnEditClickListener(sleepData -> {
             Fragment editSleepItem = new EditSleepItem();
-
             Bundle bundle = new Bundle();
-            bundle.putLong("id",sleepData.getId());
+            bundle.putLong("id", sleepData.getId());
             bundle.putString("start", DAY_TIME_FORMAT.format(sleepData.getStartTime()));
-            bundle.putString("end", DAY_TIME_FORMAT.format(sleepData.getEndTime()));
-            editSleepItem.setArguments(bundle);
+            if (sleepData.getEndTime() != null) {
+                bundle.putString("end", DAY_TIME_FORMAT.format(sleepData.getEndTime()));
+            } else bundle.putString("end", null);
 
+            bundle.putString("notes", sleepData.getNotes());
+            editSleepItem.setArguments(bundle);
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.sleep_frame_container, editSleepItem).addToBackStack(null).commit();
         });
+
+        sleepFragmentAdapter.setOnDeleteClickListener(this::showAlert);
+    }
+
+    private void showAlert(SleepData sleepData) {
+        AlertDialog.Builder diag = new AlertDialog.Builder(requireContext());
+        diag.setMessage("Do you want to DELETE recording?");
+        diag.setPositiveButton("Yes", (dialog, which) -> {
+            sleepViewModel.delete(sleepData);
+            Toast.makeText(getContext(), "Deleting", Toast.LENGTH_SHORT).show();
+        });
+        diag.setNegativeButton("No", (dialog, which) -> {
+            return;
+        });
+        diag.create().show();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -145,32 +172,64 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
 
     private void deleteData() {
         startStopBtn.setChecked(false);
-        sleepFragmentAdapter.clearData();
         sleepViewModel.deleteAllSleepData();
         Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
     }
 
     private void addNewData(boolean isStop) {
         if (!isStop) {
-            SleepData sleepData = new SleepData(new Date(), null, null);
+            SleepData sleepData = new SleepData(new Date(), null, null, null);
             sleepViewModel.insert(sleepData);
             this.id = sleepData.getId();
+            startTimer();
+
         } else {
             SleepData item = sleepFragmentAdapter.getLastItem();
             item.setEndTime(new Date());
             sleepViewModel.update(item);
+            stopTimer();
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void startTimer() {
+        Log.d("TAG", " START TIMER  ");
+        disposable =
+                Observable.interval(1, TimeUnit.MINUTES)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(v -> {
+                            sleepFragmentAdapter.getLastItem().setResult();
+                            sleepFragmentAdapter.notifyItemChanged(sleepFragmentAdapter.getItemCount() - 1, SleepFragmentAdapter.PAYLOAD_RESULT);
+                        }, e -> Log.d("TAG", "ERROR"));
+    }
+
+    private void stopTimer() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+            disposable = null;
         }
     }
 
     @Override
     public void onSaveInstanceState(@NotNull Bundle savedInstanceState) {
         saveInstance(startStopBtn.isChecked());
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
-    public void onDestroyView() {
-        saveInstance(startStopBtn.isChecked());
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG", "ON PAUSE");
+        stopTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "ON RESUME , button - " + startStopBtn.isChecked());
+        if (disposable == null && startStopBtn.isChecked()) {
+            startTimer();
+        }
     }
 
     private void saveInstance(boolean isChecked) {
@@ -195,8 +254,8 @@ public class SleepFragment extends Fragment implements View.OnClickListener {
         Log.d("TAG", " selected data set -  " + selectedData);
     }
 
-    public void updateAfterEdit(Date start, Date end , long id) {
-        SleepData sleepData = new SleepData(start,end,null);
+    public void updateAfterEdit(long id, Date start, Date end, String result , String notes) {
+        SleepData sleepData = new SleepData(start, end, result, notes);
         sleepData.setId(id);
         sleepViewModel.update(sleepData);
     }

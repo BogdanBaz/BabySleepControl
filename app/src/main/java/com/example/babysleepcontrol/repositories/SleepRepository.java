@@ -22,6 +22,7 @@ public class SleepRepository {
         allSleepData = sleepDao.getAllNotes();
     }
 
+
     public void insert(SleepData sleepData) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override

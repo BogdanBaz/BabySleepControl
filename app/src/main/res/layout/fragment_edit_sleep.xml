@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="55dp"
     android:layout_gravity="center_horizontal"
+    android:layout_marginTop="55dp"
     android:background="@color/purple_200">
 
 
@@ -14,20 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="34dp"
         android:focusableInTouchMode="false"
         android:inputType="time"
         android:text="START TIME"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_date_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <EditText
         android:id="@+id/start_date_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:focusableInTouchMode="false"
         android:inputType="date"
         android:text="START DATE"
@@ -39,7 +39,7 @@
         android:id="@+id/end_date_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:focusableInTouchMode="false"
         android:inputType="date"
@@ -52,71 +52,86 @@
         android:id="@+id/end_time_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="70dp"
+        android:layout_marginTop="34dp"
         android:focusableInTouchMode="false"
         android:inputType="time"
         android:text="END TIME"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/end_date_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <ImageView
         android:id="@+id/edit_arrows_img"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/end_time_edit"
-        app:srcCompat="@drawable/sleeparrows"
-        android:layout_marginTop="32dp"/>
+        app:srcCompat="@drawable/sleeparrows" />
 
     <Button
         android:id="@+id/cancel_btn_edit"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@android:drawable/ic_menu_close_clear_cancel"
         app:backgroundTint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/save_btn_edit"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@android:drawable/ic_menu_save"
         app:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="65dp"
-        android:layout_height="75dp"
-        app:layout_constraintEnd_toEndOf= "parent"
+        android:layout_width="64dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
         app:srcCompat="@drawable/baby_icon" />
 
     <TextView
         android:id="@+id/res_txt_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="13dp"
         android:text="result is"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_arrows_img" />
+
+
+    <EditText
+        android:id="@+id/notes_txt_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:hint="put some notes..."
+        android:textSize="13sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_arrows_img" />
+        app:layout_constraintTop_toBottomOf="@+id/res_txt_edit"
+        />
 
     <ImageView
         android:id="@+id/imageView2"

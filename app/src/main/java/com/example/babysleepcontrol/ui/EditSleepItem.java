@@ -3,11 +3,11 @@ package com.example.babysleepcontrol.ui;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,12 +31,14 @@ import static com.example.babysleepcontrol.enums.Constants.TIME_ONLY_FORMAT;
 public class EditSleepItem extends Fragment implements View.OnClickListener {
 
     private Button cancelBtn, saveBtn;
-    private EditText startDate, startTime, endDate, endTime;
+    private EditText startDate, startTime, endDate, endTime, notes;
     private TextView result;
     private long id;
     private Date itemStart, itemEnd;
     private Date start, end;
     private SleepFragment sleepFragment = null;
+    private Boolean isEnd;
+    private String noteStart,noteEnd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,21 @@ public class EditSleepItem extends Fragment implements View.OnClickListener {
 
         try {
             id = this.getArguments().getLong("id");
-            end = DAY_TIME_FORMAT.parse(this.getArguments().getString("end"));
+            String endArg = this.getArguments().getString("end");
+            if (endArg != null) {
+                end = DAY_TIME_FORMAT.parse(this.getArguments().getString("end"));
+                isEnd = true;
+            } else {
+                end = new Date();
+                this.isEnd = false;
+            }
+
+            this.noteStart = this.getArguments().getString("notes");
+
+
             start = DAY_TIME_FORMAT.parse(this.getArguments().getString("start"));
-            itemEnd = end;
             itemStart = start;
+            itemEnd = end;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -65,6 +78,7 @@ public class EditSleepItem extends Fragment implements View.OnClickListener {
         startTime = view.findViewById(R.id.start_time_edit);
         endTime = view.findViewById(R.id.end_time_edit);
         result = view.findViewById(R.id.res_txt_edit);
+        notes = view.findViewById(R.id.notes_txt_edit);
 
         cancelBtn.setOnClickListener(v -> getParentFragmentManager().popBackStackImmediate());
 
@@ -76,22 +90,31 @@ public class EditSleepItem extends Fragment implements View.OnClickListener {
         endDate.setOnClickListener(this);
         startTime.setOnClickListener(this);
         endTime.setOnClickListener(this);
+        notes.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
+        if (!isEnd) {
+            endDate.setVisibility(View.INVISIBLE);
+            endTime.setVisibility(View.INVISIBLE);
+        }
         initData();
         return view;
     }
 
     private void initData() {
         startDate.setText(DAY_YEAR_ONLY_FORMAT.format(start));
-        endDate.setText(DAY_YEAR_ONLY_FORMAT.format(end));
         startTime.setText(TIME_ONLY_FORMAT.format(start));
+        endDate.setText(DAY_YEAR_ONLY_FORMAT.format(end));
         endTime.setText(TIME_ONLY_FORMAT.format(end));
+        if (noteStart != null) {
+            notes.setText(noteStart);
+        }
 
         long milliseconds = end.getTime() - start.getTime();
         int resHours = (int) (milliseconds / (60 * 60 * 1000));
         int resMinutes = (int) (milliseconds - (long) resHours * (60 * 60 * 1000)) / (60 * 1000);
 
-        result.setText(String.format("%02d", resHours) + "h. " + String.format("%02d", resMinutes) + "m.");
+        result.setText(String.format("%02dh. %02dm.", resHours, resMinutes));
+
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -151,7 +174,8 @@ public class EditSleepItem extends Fragment implements View.OnClickListener {
     }
 
     private void saveReturnSleepFragment() {
-        if (itemStart == start && itemEnd == end) {
+        this.noteEnd = notes.getText().toString();
+        if (itemStart == start && itemEnd == end && noteStart.equals(noteEnd)) {
             Toast.makeText(getContext(), "No changes provided... ", Toast.LENGTH_SHORT).show();
             return;
         } else {
@@ -167,20 +191,18 @@ public class EditSleepItem extends Fragment implements View.OnClickListener {
     }
 
     private void showAlert() {
-        AlertDialog.Builder diag = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder diag = new AlertDialog.Builder(requireContext());
         diag.setMessage("Do you want to SAVE changes?");
-        diag.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sleepFragment.updateAfterEdit(start, end, id);
-                getParentFragmentManager().popBackStackImmediate();
-            }
+        diag.setPositiveButton("Yes", (dialog, which) -> {
+            if (!isEnd)
+                sleepFragment.updateAfterEdit(id, start, null, result.getText().toString(), noteEnd);
+            else
+                sleepFragment.updateAfterEdit(id, start, end, result.getText().toString(), noteEnd);
+
+            getParentFragmentManager().popBackStackImmediate();
         });
-        diag.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
+        diag.setNegativeButton("No", (dialog, which) -> {
+            return;
         });
         diag.create().show();
     }
