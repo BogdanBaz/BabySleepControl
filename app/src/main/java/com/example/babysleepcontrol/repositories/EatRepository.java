@@ -5,8 +5,11 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.babysleepcontrol.dao.EatDao;
 import com.example.babysleepcontrol.dao.SleepDao;
+import com.example.babysleepcontrol.data.EatData;
 import com.example.babysleepcontrol.data.SleepData;
+import com.example.babysleepcontrol.database.EatDatabase;
 import com.example.babysleepcontrol.database.SleepDatabase;
 
 import java.util.Calendar;
@@ -25,30 +28,25 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.example.babysleepcontrol.enums.Constants.DAY_YEAR_ONLY_FORMAT;
 
-public class SleepRepository {
+public class EatRepository {
 
-    private final SleepDao sleepDao;
-    private final MutableLiveData<List<SleepData>> dayOnlySleepData;
-    private Single<SleepData> sleepDataSingle;
-    private Single<List<SleepData>> dataByPeriod;
+    private final EatDao eatDao;
+    private final MutableLiveData<List<EatData>> dayOnlyEatData;
+    private Single<List<EatData>> eatDataByPeriod;
+    private Single<EatData> eatDataSingle;
     private String newDate;
     private String nextDate;
     private Disposable mDisposable;
 
 
-    public SleepRepository(Application application) {
-        SleepDatabase database = SleepDatabase.getInstance(application);
-        sleepDao = database.sleepDao();
-        dayOnlySleepData = new MutableLiveData<>();
-    }
-
-    public MutableLiveData<List<SleepData>> getDayOnlySleepData() {
-        return dayOnlySleepData;
+    public EatRepository(Application application) {
+        EatDatabase database = EatDatabase.getInstance(application);
+        eatDao = database.eatDao();
+        dayOnlyEatData = new MutableLiveData<>();
     }
 
     public void setNewDate(Date newDate) {
         if (mDisposable != null) {
-            Log.d("TAG", "DISPOSE ");
             mDisposable.dispose();
         }
 
@@ -63,23 +61,27 @@ public class SleepRepository {
     }
 
     private void init() {
-        mDisposable = sleepDao.getTodaySleepData(newDate, nextDate)
+        mDisposable = eatDao.getTodayEatData(newDate, nextDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<SleepData>>() {
+                .subscribe(new Consumer<List<EatData>>() {
                     @Override
-                    public void accept(List<SleepData> sleepData) throws Exception {
-                        dayOnlySleepData.postValue(sleepData);
+                    public void accept(List<EatData> eatData) throws Exception {
+                        dayOnlyEatData.postValue(eatData);
                     }
                 });
     }
 
-    public long insert(SleepData sleepData) throws ExecutionException, InterruptedException {
+    public MutableLiveData<List<EatData>> getDayOnlyEatData() {
+        return dayOnlyEatData;
+    }
+
+    public long insert(EatData eatData) throws ExecutionException, InterruptedException {
 
         Callable<Long> callable = new Callable<Long>() {
             @Override
             public Long call() throws Exception {
-                return sleepDao.insert(sleepData);
+                return eatDao.insert(eatData);
             }
         };
 
@@ -87,54 +89,53 @@ public class SleepRepository {
         return future.get();
     }
 
-    public void update(SleepData sleepData) {
+    public void update(EatData eatData) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                sleepDao.update(sleepData);
+                eatDao.update(eatData);
             }
         });
     }
 
-    public void delete(SleepData sleepData) {
+    public void delete(EatData eatData) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                sleepDao.delete(sleepData);
-            }
-        });
-    }
-
-    public void deleteAllSleepData() {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                sleepDao.deleteAllNotes();
+                eatDao.delete(eatData);
             }
         });
     }
 
     public void getNotesById(long id) {
-        this.sleepDataSingle = sleepDao.getNoteById(id);
+        this.eatDataSingle = eatDao.getNoteById(id);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    public void getMaxIdNote() {
-        this.sleepDataSingle = sleepDao.getMaxIdNote();
+    public void getMaxIdNote () {
+        this.eatDataSingle = eatDao.getMaxIdNote();
     }
 
     public void setDataByPeriod(Date dateStart, Date dateEnd) {
         newDate = DAY_YEAR_ONLY_FORMAT.format(dateStart);
         nextDate = DAY_YEAR_ONLY_FORMAT.format(dateEnd);
-        Log.d("TAG ", "IN REPOSITORY newDate " + newDate + "nextDate " + nextDate);
-        this.dataByPeriod = sleepDao.getSleepDataByPeriod(newDate, nextDate);
+        this.eatDataByPeriod = eatDao.getPeriodEatData(newDate, nextDate);
     }
 
-    public Single<List<SleepData>> getDataByPeriod() {
-        return dataByPeriod;
+    public Single<List<EatData>> getDataByPeriod() {
+        return eatDataByPeriod;
     }
 
-    public Single<SleepData> getSleepDataSingle() {
-        return sleepDataSingle;
+    public Single<EatData> getEatDataSingle() {
+        return eatDataSingle;
     }
+
+    public void deleteAllEatData() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                eatDao.deleteAllNotes();
+            }
+        });
+    }
+
 }

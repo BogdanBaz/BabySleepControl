@@ -4,14 +4,14 @@ import androidx.room.TypeConverter;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+
+import static com.example.babysleepcontrol.enums.Constants.DAY_TIME_FORMAT;
 
 
 public class TimestampConverter {
 
-    static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+    static DateFormat df = DAY_TIME_FORMAT;
 
     @TypeConverter
     public static Date fromTimestamp(String value) {

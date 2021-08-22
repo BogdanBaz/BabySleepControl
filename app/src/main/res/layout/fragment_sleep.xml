@@ -2,49 +2,35 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sleep_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/sleep_fragment_layout"
+    android:animateLayoutChanges="true"
     tools:context=".ui.sleepfragment.SleepFragment">
-
-
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.75"
+        android:contentDescription="TODO"
         android:scaleType="centerCrop"
-        android:src="@drawable/sleep"
-        android:contentDescription="TODO" />
+        android:src="@drawable/sleep" />
 
-    <TextView
-        android:id="@+id/current_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:layout_marginStart="16dp"
-        android:text="CURRENT DATA"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </TextView>
 
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="top"
         app:layout_constraintBottom_toTopOf="@id/layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/delete_btn">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_txtv">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -54,34 +40,34 @@
             android:numColumns="auto_fit">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ToggleButton
             android:id="@+id/start_stop_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/purple_500"
             android:textOff="start sleeping"
-            android:textOn="stop sleeping"
-            android:layout_marginBottom="8dp"/>
+            android:textOn="stop sleeping" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="8dp"
             android:alpha="0.75"
             android:background="@color/purple_700"
             android:orientation="horizontal">
@@ -93,10 +79,10 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1.5"
                 android:background="@color/purple_500"
-                android:src="@drawable/ic_previous"/>
+                android:src="@drawable/ic_previous" />
 
             <ImageButton
-                android:id="@+id/stat_btn"
+                android:id="@+id/statistic_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
@@ -111,7 +97,7 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:background="@color/purple_500"
-                android:src="@drawable/ic_calendar"/>
+                android:src="@drawable/ic_calendar" />
 
             <ImageButton
                 android:id="@+id/next_btn"
@@ -125,31 +111,112 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/delete_btn"
-        android:layout_width="50dp"
+    <LinearLayout
+        android:id="@+id/linearLayout_txtv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@android:drawable/ic_menu_delete"
-        app:backgroundTintMode="screen"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
-        app:layout_constraintStart_toEndOf="@+id/current_data"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/current_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="#7074569E"
+            android:gravity="center"
+            android:text="CURRENT DATA"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/sum_activity_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="#7074569E"
+            android:gravity="center"
+            android:text="all activity"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:drawable/ic_menu_delete"
+            app:backgroundTint="#E1DFDF" />
+
+    </LinearLayout>
+
 
     <FrameLayout
         android:id="@+id/sleep_frame_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:animationCache="true"
         android:focusable="auto"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/layout"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
+
+
+        <LinearLayout
+            android:id="@+id/buttons_in_frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center"
+            android:background="#880E4F"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <ImageButton
+                android:id="@+id/pie_chart_btn"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@color/darkRed"
+                android:src="@drawable/ic_baseline_pie_chart_24" />
+
+            <ImageButton
+                android:id="@+id/bar_chart_btn"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@color/darkRed"
+                android:src="@drawable/ic_baseline_area_chart_24" />
+
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@color/darkRed"
+                android:src="@android:drawable/star_off" />
+
+            <ImageButton
+                android:id="@+id/close_btn_in_container"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@color/darkRed"
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        </LinearLayout>
+
 
     </FrameLayout>
 

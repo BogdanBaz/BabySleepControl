@@ -9,13 +9,15 @@ import androidx.room.Update;
 
 import com.example.babysleepcontrol.data.SleepData;
 
-import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @Dao
 public interface  SleepDao{
     @Insert
-    void insert(SleepData sleepData);
+    long insert(SleepData sleepData);
 
     @Update
     void update(SleepData sleepData);
@@ -29,7 +31,15 @@ public interface  SleepDao{
     @Query("SELECT * FROM sleep_table ")
     LiveData<List<SleepData>> getAllNotes();
 
-    @Query("SELECT * FROM sleep_table WHERE date(startTime) LIKE:start ")
-    LiveData<List<SleepData>> getNotesByDay(Date start);
+   @Query("SELECT * FROM sleep_table WHERE startTime BETWEEN date(:day) AND date(:nextDay)")
+    Flowable<List<SleepData>> getTodaySleepData (String day, String nextDay);
 
+    @Query("SELECT * FROM sleep_table WHERE startTime BETWEEN date(:day) AND date(:nextDay)")
+    Single<List<SleepData>> getSleepDataByPeriod(String day, String nextDay);
+
+    @Query("SELECT * FROM sleep_table WHERE id = :id")
+    Single<SleepData> getNoteById (long id);
+
+    @Query("SELECT * FROM sleep_table WHERE   id = (SELECT MAX(ID)  FROM sleep_table) ")
+    Single<SleepData> getMaxIdNote ();
 }

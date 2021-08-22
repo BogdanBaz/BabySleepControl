@@ -4,21 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="22dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="22dp"
-    android:background="@color/purple_500">
+    android:paddingBottom="10dp"
+    android:layout_marginEnd="22dp">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
         android:alpha="0.85"
+        android:background="#FFFFFF"
         android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:id="@+id/sleep_item_image"
@@ -111,9 +109,9 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/result_txt"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="110dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/result_txt"
             app:srcCompat="@drawable/stopwatch" />
 
         <TextView
@@ -121,8 +119,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="114dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="114dp"
             android:text="result_is"
             android:textColor="@color/black" />
 
@@ -142,5 +140,34 @@
 
     </RelativeLayout>
 
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/container"
+        android:layout_height="10dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_activ"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        app:cardBackgroundColor="#C6B2CA"
+        app:layout_constraintBottom_toTopOf="@+id/space"
+        app:cardCornerRadius="10dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_marginStart="20dp"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/baby" />
+
+        <TextView
+            android:id="@+id/child_activity_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="16sp" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
